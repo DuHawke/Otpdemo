@@ -13,7 +13,7 @@ public class Otp {
         StringBuilder otp = new StringBuilder();
 
         for (int i = 0; i < LENGTH; i++) {
-            otp.append(numbers.charAt(secure.nextInt(numbers.length())));
+            otp.append(secure.nextInt(10));
         }
         return otp.toString();
     }
