@@ -29,7 +29,7 @@ public class Otp {
         return currentOTP == null || System.currentTimeMillis() - createdTime >= EXPRIRE_TIME;
     }
 
-    public static VerifyResult isVerify(String input) {
+    private static VerifyResult isVerify(String input) {
         if(isExpired())
             return new VerifyResult(false, "OTP expired");
         if(usedOTP.contains(input))
@@ -37,13 +37,14 @@ public class Otp {
 
         if(input.equals(currentOTP)) {
             usedOTP.add(input);
+            currentOTP = null;
             return new VerifyResult(true, "Valid OTP");
         }
 
         return new VerifyResult(false, "Invalid or expired OTP");
     }
 
-    static class VerifyResult {
+    /*static class VerifyResult {
         boolean success;
         String message;
         
@@ -51,7 +52,8 @@ public class Otp {
             this.success = success;
             this.message = message;
         }
-    }
+    }*/
+    record VerifyResult(boolean success, String message) {}
 
     public static void menu() {
         System.out.println("====================");
@@ -71,17 +73,17 @@ public class Otp {
             choice = scanner.nextInt();
             scanner.nextLine();
             switch (choice) {
-                case 1:
+                case 1 -> {
                     String otp = generateOTP();
                     System.out.println("Your OTP is: " + otp);
-                    break;
-                case 2:
+                }
+                case 2 -> {
                     System.out.print("Enter OTP: ");
                     String input = scanner.nextLine();
                     VerifyResult result = isVerify(input);
                     System.out.println(result.message);
-                    break;
-                case 3:
+                }
+                case 3 -> {
                     if(currentOTP == null) {
                         System.out.println("There is no OTP. Generate new OTP");
                         break;
@@ -90,11 +92,11 @@ public class Otp {
                         System.out.println("OTP expired. Generate new OTP");
                     else
                         System.out.println("OTP still valid");
-                    break;
-                case 4:
+                }
+                case 4 -> {
                     scanner.close();
                     System.exit(0);
-                    break;
+                }
             }
         }
     }
